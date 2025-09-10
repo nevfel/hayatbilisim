@@ -1,1 +1,0 @@
-import{o as r,e as n,r as o}from"./app-CayAy1B_.js";const s=["type"],c={__name:"PrimaryButton",props:{type:{type:String,default:"submit"}},setup(t){return(e,a)=>(r(),n("button",{type:t.type,class:"btn btn-primary text-primary-content"},[o(e.$slots,"default")],8,s))}};export{c as _};

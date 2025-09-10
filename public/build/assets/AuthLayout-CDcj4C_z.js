@@ -1,1 +1,0 @@
-import{d as r,o as n,e as l,b as e,u as o,Z as i,a as t,r as c}from"./app-CayAy1B_.js";import{_,a as m}from"./Navbar-CSEzKaue.js";const u={class:"min-h-screen"},h={__name:"AuthLayout",props:{title:String},setup(a){return r(!1),(s,f)=>(n(),l("div",null,[e(o(i),{title:a.title},null,8,["title"]),e(_),e(m),t("div",u,[t("main",null,[c(s.$slots,"default")])])]))}};export{h as _};

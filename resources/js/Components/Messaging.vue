@@ -28,19 +28,29 @@
       </div>
 
       <!-- Gönder Butonu -->
-
-      <button type="submit" class="w-full btn btn-primary text-primary-content mt-4">
-        GÖNDER
+      <button type="submit" :disabled="isLoading" 
+        class="w-full btn btn-primary text-primary-content mt-4 disabled:opacity-50 disabled:cursor-not-allowed">
+        {{ isLoading ? 'GÖNDERİLİYOR...' : 'GÖNDER' }}
       </button>
     </form>
 
     <!-- Başarı Mesajı -->
     <p v-if="successMessage" class="mt-4 text-green-500 text-center">{{ successMessage }}</p>
+    
+    <!-- Hata Mesajı -->
+    <p v-if="errorMessage" class="mt-4 text-red-500 text-center">{{ errorMessage }}</p>
+    
+    <!-- Yükleniyor Durumu -->
+    <div v-if="isLoading" class="mt-4 text-center">
+      <div class="inline-block animate-spin rounded-full h-6 w-6 border-b-2 border-blue-500"></div>
+      <p class="mt-2 text-gray-600">Mesaj gönderiliyor...</p>
+    </div>
   </div>
 </template>
 
 <script>
 import { reactive, ref } from 'vue';
+import axios from 'axios';
 
 export default {
   setup() {
@@ -51,25 +61,52 @@ export default {
       message: '',
     });
 
-    // Başarı mesajı için ref
+    // Durum mesajları için ref'ler
     const successMessage = ref('');
+    const errorMessage = ref('');
+    const isLoading = ref(false);
 
     // Form gönderim fonksiyonu
-    const submitForm = () => {
-      console.log('Form gönderildi:', form);
+    const submitForm = async () => {
+      // Önceki mesajları temizle
+      successMessage.value = '';
+      errorMessage.value = '';
+      isLoading.value = true;
 
-      // Başarı mesajı ayarla
-      successMessage.value = 'Mesajınız başarıyla gönderildi!';
+      try {
+        const response = await axios.post('/api/contact', {
+          name: form.name,
+          email: form.email,
+          message: form.message,
+        });
 
-      // Formu sıfırla
-      form.name = '';
-      form.email = '';
-      form.message = '';
+        if (response.data.success) {
+          successMessage.value = response.data.message;
+          // Formu sıfırla
+          form.name = '';
+          form.email = '';
+          form.message = '';
+        } else {
+          errorMessage.value = response.data.message || 'Bir hata oluştu.';
+        }
+      } catch (error) {
+        console.error('E-posta gönderim hatası:', error);
+        
+        if (error.response && error.response.data) {
+          errorMessage.value = error.response.data.message || 'Mesaj gönderilirken bir hata oluştu.';
+        } else {
+          errorMessage.value = 'Bağlantı hatası. Lütfen internet bağlantınızı kontrol edin.';
+        }
+      } finally {
+        isLoading.value = false;
+      }
     };
 
     return {
       form,
       successMessage,
+      errorMessage,
+      isLoading,
       submitForm,
     };
   },

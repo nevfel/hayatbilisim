@@ -3,6 +3,7 @@
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\Subscribed;
+use App\Http\Controllers\ContactController;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
 
@@ -14,6 +15,7 @@ Route::get('/', function () {
         'phpVersion' => PHP_VERSION,
     ]);
 })->name('welcome');
+
 
 // Auth routes - jetsream
 Route::middleware([

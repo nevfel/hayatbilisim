@@ -12,6 +12,9 @@
         "laravel/jetstream": "^5.0",
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.9",
+        "mews/pos": "^1.7",
+        "nyholm/psr7": "^1.8",
+        "symfony/event-dispatcher": "^7.4",
         "symfony/http-client": "^7.1",
         "symfony/mailgun-mailer": "^7.1",
         "tightenco/ziggy": "^2.0"

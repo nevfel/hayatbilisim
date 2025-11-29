@@ -21,6 +21,13 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->api(prepend: [
             \Illuminate\Http\Middleware\HandleCors::class,
         ]);
+
+        // Payment route'ları CSRF kontrolünden muaf (Banka POST istekleri için)
+        $middleware->validateCsrfTokens(except: [
+            'kuveytpos/success',
+            'kuveytpos/fail',
+            'kuveytpos/callback',
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

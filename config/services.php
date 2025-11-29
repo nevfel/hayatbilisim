@@ -38,4 +38,12 @@ return [
         ],
     ],
 
+    'kuveytpos' => [
+        'merchant_id' => env('KUVEYTPOS_MERCHANT_ID'),
+        'user_name' => env('KUVEYTPOS_USER_NAME'),
+        'customer_id' => env('KUVEYTPOS_CUSTOMER_ID'),
+        'password' => env('KUVEYTPOS_PASSWORD'),
+        'test_mode' => env('KUVEYTPOS_TEST_MODE', true),
+    ],
+
 ];

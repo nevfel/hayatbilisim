@@ -1,26 +1,12 @@
 <script setup>
-import { ref } from 'vue';
-import { Head, Link, router } from '@inertiajs/vue3';
+import { Head } from '@inertiajs/vue3';
 import Banner from '@/Components/Banner.vue';
 import Navbar from '@/Components/Navbar.vue';
+import Footer from '@/Components/Footer.vue';
 
 defineProps({
     title: String,
 });
-
-const showingNavigationDropdown = ref(false);
-
-const switchToTeam = (team) => {
-    router.put(route('current-team.update'), {
-        team_id: team.id,
-    }, {
-        preserveState: false,
-    });
-};
-
-const logout = () => {
-    router.post(route('logout'));
-};
 </script>
 
 <template>
@@ -29,14 +15,15 @@ const logout = () => {
 
         <Banner />
 
-        <Navbar />
-
-        <div class="min-h-screen">
+        <div class="min-h-screen flex flex-col">
+            <Navbar />
 
             <!-- Page Content -->
-            <main>
+            <main class="flex-1">
                 <slot />
             </main>
+
+            <Footer />
         </div>
     </div>
 </template>

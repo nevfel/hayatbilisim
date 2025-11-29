@@ -2,7 +2,7 @@
 </script>
 
 <template>
-    <footer class="footer p-10 bg-base-300 text-base-content">
+    <footer class="footer p-10 bg-base-200 text-base-content border-t border-base-300">
         <nav>
             <h6 class="footer-title">Hizmetlerimiz</h6>
             <a :href="route('product.show')" class="link link-hover">1C ERP Çözümü</a>
@@ -61,4 +61,47 @@
             </div>
         </nav>
     </footer>
+    
+    <!-- Footer Bottom Section with Payment Methods -->
+    <div class="bg-base-300 border-t border-base-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+                <!-- Copyright -->
+                <div class="text-sm text-base-content/70">
+                    <p>&copy; {{ new Date().getFullYear() }} {{ $page.props.app?.name || 'Hayat Bilişim' }}. Tüm hakları saklıdır.</p>
+                </div>
+                
+                <!-- Payment Methods -->
+                <div class="flex items-center gap-2 flex-wrap justify-center md:justify-end">
+                    <span class="text-sm text-base-content/70 mr-2">Güvenli Ödeme:</span>
+                    <div class="flex items-center gap-2">
+                        <!-- Visa -->
+                        <div class="bg-white rounded px-2 py-1.5 shadow-sm hover:shadow-md transition-shadow border border-base-300" title="Visa">
+                            <svg width="50" height="16" viewBox="0 0 50 16" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M21.5 5.5h-3.5l-2.2 5h3.5l2.2-5zm8.5 3.3c0-1.2-.7-1.9-1.8-1.9-.8 0-1.3.2-1.7.4l.2 1.5c.3-.2.7-.3 1.2-.3.4 0 .7.2.7.5 0 .4-.7.7-1.3.9-.7.2-1.3.5-1.3 1.3 0 .8.7 1.2 1.6 1.2.7 0 1.1-.2 1.5-.4l-.2-1.4c-.2.1-.6.2-1.1.2-.4 0-.7-.2-.7-.4 0-.4.6-.6 1.2-.8.7-.2 1.3-.5 1.3-1.2zm8.1-1.7h-1.6c-.5 0-.8.2-1 .6l-3.5 4.8h2.1l.5-1.3h2.5l.3 1.3h1.8l-1.2-5.4zm-2.4 3.3l1-3 0.6 1.5-1.6 1.5zm-6.1-3.3l-1.5 5.4h1.9l1.5-5.4h-1.9z" fill="#1434CB"/>
+                                <path d="M10.5 5.5L8.2 10.9h-2L4.1 5.5h2.1l1.1 3.1c.2.5.3 1 .4 1.4h.1c.1-.4.2-.9.4-1.4L9.4 5.5h1.1z" fill="#1434CB"/>
+                            </svg>
+                        </div>
+                        
+                        <!-- Mastercard -->
+                        <div class="bg-white rounded px-2 py-1.5 shadow-sm hover:shadow-md transition-shadow border border-base-300" title="Mastercard">
+                            <svg width="50" height="16" viewBox="0 0 50 16" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="11" cy="8" r="4.5" fill="#EB001B"/>
+                                <circle cx="19" cy="8" r="4.5" fill="#F79E1B"/>
+                                <path d="M15 4.5c1.4 0 2.6.5 3.5 1.3-1.1 1.4-1.8 3.2-1.8 5.2s.7 3.8 1.8 5.2c-.9.8-2.1 1.3-3.5 1.3-2.8 0-5-2.2-5-5s2.2-5 5-5z" fill="#FF5F00"/>
+                            </svg>
+                        </div>
+                        
+                        <!-- Troy -->
+                        <div class="bg-white rounded px-2 py-1.5 shadow-sm hover:shadow-md transition-shadow border border-base-300" title="Troy">
+                            <svg width="50" height="16" viewBox="0 0 50 16" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M25 4c-1.4 0-2.5 1.1-2.5 2.5s1.1 2.5 2.5 2.5 2.5-1.1 2.5-2.5-1.1-2.5-2.5-2.5zm0 3.5c-.6 0-1-.4-1-1s.4-1 1-1 1 .4 1 1-.4 1-1 1zm-3.5-2h-1.2v4.5h1.2v-1.8h.9c.6 0 1.1-.5 1.1-1.1s-.5-1.1-1.1-1.1h-.9zm7 0h-1.2v4.5h1.2v-1.8h.9c.6 0 1.1-.5 1.1-1.1s-.5-1.1-1.1-1.1h-.9z" fill="#1A1F71"/>
+                                <path d="M12 4h-1.2v4.5H12V6.2h.9c.6 0 1.1-.5 1.1-1.1S13.5 4 12.9 4H12zm16 0h-1.2v4.5H28V6.2h.9c.6 0 1.1-.5 1.1-1.1S29.5 4 28.9 4H28z" fill="#1A1F71"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </template>

@@ -1,1 +1,0 @@
-import{o as n,e as o,r}from"./app-QlkeK5iY.js";const s=["type"],c={__name:"SecondaryButton",props:{type:{type:String,default:"button"}},setup(t){return(e,a)=>(n(),o("button",{type:t.type,class:"btn btn-neutral"},[r(e.$slots,"default")],8,s))}};export{c as _};

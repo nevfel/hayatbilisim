@@ -22,9 +22,9 @@
                 </nav>
                 <nav>
                     <h6 class="footer-title">Yasal</h6>
-                    <a :href="route('kvkk')" class="link link-hover">KVKK</a>
-                    <a :href="route('terms')" class="link link-hover">Kullanım Şartları</a>
-                    <a :href="route('privacy')" class="link link-hover">Gizlilik Politikası</a>
+                    <a :href="route('gizlilik')" class="link link-hover">Gizlilik Sözleşmesi</a>
+                    <a :href="route('mesafeli')" class="link link-hover">Mesafeli Satış Sözleşmesi</a>
+                    <a :href="route('iade')" class="link link-hover">İade Sözleşmesi</a>
                 </nav>
                 <nav>
                     <h6 class="footer-title">Sosyal Medya</h6>

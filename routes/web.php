@@ -35,6 +35,18 @@ Route::get('/privacy', function () {
     return Inertia::render('Legal/Privacy');
 })->name('privacy');
 
+Route::get('/gizlilik-sozlesmesi', function () {
+    return Inertia::render('Legal/Gizlilik');
+})->name('gizlilik');
+
+Route::get('/mesafeli-satis-sozlesmesi', function () {
+    return Inertia::render('Legal/Mesafeli');
+})->name('mesafeli');
+
+Route::get('/iade-sozlesmesi', function () {
+    return Inertia::render('Legal/Iade');
+})->name('iade');
+
 // Ürün (herkese açık - giriş gerektirmez)
 Route::get('/erp-cozumu', [ProductController::class, 'show'])->name('product.show');
 

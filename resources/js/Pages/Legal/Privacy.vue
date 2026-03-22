@@ -8,13 +8,13 @@
                 
                 <div class="prose max-w-none">
                     <p class="text-gray-700 mb-4">
-                        <strong>Son Güncelleme:</strong> {{ new Date().toLocaleDateString('tr-TR') }}
+                        <strong>Son Güncelleme:</strong> 22 Mart 2026
                     </p>
 
                     <section class="mb-8">
                         <h2 class="text-2xl font-semibold text-gray-900 mb-4">1. Gizlilik Taahhüdümüz</h2>
                         <p class="text-gray-700 mb-4">
-                            [Şirket Adı] olarak, kişisel verilerinizin korunmasına büyük önem vermekteyiz. 
+                            HAYAT BİLİŞİM olarak, kişisel verilerinizin korunmasına büyük önem vermekteyiz. 
                             Bu gizlilik politikası, kişisel bilgilerinizin nasıl toplandığı, kullanıldığı 
                             ve korunduğu hakkında bilgi vermektedir.
                         </p>

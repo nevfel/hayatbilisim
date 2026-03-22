@@ -7,6 +7,7 @@ import Benefits from '@/Components/Benefits.vue';
 import SocialProof from '@/Components/SocialProof.vue';
 import Messaging from '@/Components/Messaging.vue';
 import FAQ from '@/Components/FAQ.vue';
+import StatsBar from '@/Components/StatsBar.vue';
 
 defineProps({
     canLogin: {
@@ -38,6 +39,9 @@ function handleImageError() {
 
         <!-- HERO SECTION -->
         <Hero />
+
+        <!-- STATS BAR -->
+        <StatsBar />
 
         <div class="space-y-24 py-24 bg-gradient-to-t to-5% from-base-300 to-base-100">
             <!-- PRODUCT FEATURES & BENEFITS -->

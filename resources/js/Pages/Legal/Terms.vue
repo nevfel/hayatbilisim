@@ -8,13 +8,13 @@
                 
                 <div class="prose max-w-none">
                     <p class="text-gray-700 mb-4">
-                        <strong>Son Güncelleme:</strong> {{ new Date().toLocaleDateString('tr-TR') }}
+                        <strong>Son Güncelleme:</strong> 22 Mart 2026
                     </p>
 
                     <section class="mb-8">
                         <h2 class="text-2xl font-semibold text-gray-900 mb-4">1. Genel Hükümler</h2>
                         <p class="text-gray-700 mb-4">
-                            Bu kullanım şartları, [Şirket Adı] ("Şirket") tarafından işletilen web sitesi 
+                            Bu kullanım şartları, HAYAT BİLİŞİM ("Şirket") tarafından işletilen web sitesi 
                             ve hizmetlerin kullanımına ilişkin kuralları belirlemektedir. Siteyi kullanarak 
                             bu şartları kabul etmiş sayılırsınız.
                         </p>

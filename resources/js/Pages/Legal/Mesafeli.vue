@@ -8,7 +8,7 @@
                 
                 <div class="prose max-w-none">
                     <p class="text-gray-700 mb-4">
-                        <strong>Son Güncelleme:</strong> {{ new Date().toLocaleDateString('tr-TR') }}
+                        <strong>Son Güncelleme:</strong> 22 Mart 2026
                     </p>
 
                     <section class="mb-8">

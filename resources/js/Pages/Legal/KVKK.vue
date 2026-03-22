@@ -8,14 +8,14 @@
                 
                 <div class="prose max-w-none">
                     <p class="text-gray-700 mb-4">
-                        <strong>Son Güncelleme:</strong> {{ new Date().toLocaleDateString('tr-TR') }}
+                        <strong>Son Güncelleme:</strong> 22 Mart 2026
                     </p>
 
                     <section class="mb-8">
                         <h2 class="text-2xl font-semibold text-gray-900 mb-4">1. Veri Sorumlusu</h2>
                         <p class="text-gray-700 mb-4">
                             6698 sayılı Kişisel Verilerin Korunması Kanunu ("KVKK") uyarınca, kişisel verileriniz 
-                            [Şirket Adı] ("Şirket" veya "Veri Sorumlusu") tarafından aşağıda açıklanan kapsamda 
+                            HAYAT BİLİŞİM ("Şirket" veya "Veri Sorumlusu") tarafından aşağıda açıklanan kapsamda 
                             işlenmektedir.
                         </p>
                     </section>

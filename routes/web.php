@@ -10,6 +10,7 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\KuveytPosController;
 use App\Http\Controllers\QuickPaymentController;
+use App\Http\Controllers\PaytrController;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
 
@@ -79,6 +80,14 @@ Route::prefix('kuveytpos')->group(function () {
     Route::post('/callback', [KuveytPosController::class, 'callback'])->name('kuveytpos.callback');
     Route::post('/complete-3d', [KuveytPosController::class, 'complete3DSecure'])->name('kuveytpos.complete-3d');
     Route::post('/pay-direct', [KuveytPosController::class, 'payDirect'])->name('kuveytpos.pay-direct');
+});
+
+// PayTR (herkese açık)
+Route::prefix('paytr')->group(function () {
+    Route::get('/{order}/pay', [PaytrController::class, 'token'])->name('paytr.pay');
+    Route::post('/bildirim', [PaytrController::class, 'bildirim'])->name('paytr.bildirim');
+    Route::get('/{order}/success', [PaytrController::class, 'success'])->name('paytr.success');
+    Route::get('/{order}/fail', [PaytrController::class, 'fail'])->name('paytr.fail');
 });
 
 // Hızlı Ödeme Routes (herkese açık)

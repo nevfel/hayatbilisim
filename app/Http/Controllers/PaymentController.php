@@ -21,6 +21,13 @@ class PaymentController extends Controller
                 ->with('error', 'Bu sipariş zaten tamamlanmış.');
         }
 
+        // Ödeme sağlayıcısına göre akış
+        $provider = config('site.payment_provider', 'kuveytpos');
+        if ($provider === 'paytr') {
+            // PayTR iFrame akışı
+            return redirect()->route('paytr.pay', ['order' => $order->id]);
+        }
+
         return Inertia::render('Payment/Initiate', [
             'order' => $order->load('items.product'),
         ]);
@@ -31,6 +38,12 @@ class PaymentController extends Controller
      */
     public function start3DPayment(Request $request, Order $order)
     {
+        // Ödeme sağlayıcısına göre akış
+        $provider = config('site.payment_provider', 'kuveytpos');
+        if ($provider === 'paytr') {
+            return redirect()->route('paytr.pay', ['order' => $order->id]);
+        }
+
         $request->validate([
             'card_holder_name' => 'required|string|max:255',
             'card_number' => 'required|string|min:13|max:19',

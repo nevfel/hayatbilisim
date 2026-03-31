@@ -189,4 +189,45 @@ class PaytrController extends Controller
         return redirect()->route('payment.initiate', ['order' => $order->id])
             ->with('error', 'Ödeme başarısız veya iptal edildi. Lütfen tekrar deneyiniz.');
     }
+
+    /**
+     * PayTR sabit success URL (id'siz) desteği.
+     * Not: Ödeme kesinleşmesi bildirim ile olur. Bu sadece kullanıcı dönüş sayfasıdır.
+     */
+    public function successStatic(Request $request)
+    {
+        $merchantOid = (string) $request->input('merchant_oid');
+        if ($merchantOid !== '') {
+            $order = Order::whereHas('payment', function ($q) use ($merchantOid) {
+                $q->where('transaction_id', $merchantOid);
+            })->first();
+
+            if ($order) {
+                return $this->success($order);
+            }
+        }
+
+        return redirect()->route('orders.create')
+            ->with('success', 'Ödeme isteğiniz alındı. Kesinleşmesi için PayTR bildirimi bekleniyor.');
+    }
+
+    /**
+     * PayTR sabit fail URL (id'siz) desteği.
+     */
+    public function failStatic(Request $request)
+    {
+        $merchantOid = (string) $request->input('merchant_oid');
+        if ($merchantOid !== '') {
+            $order = Order::whereHas('payment', function ($q) use ($merchantOid) {
+                $q->where('transaction_id', $merchantOid);
+            })->first();
+
+            if ($order) {
+                return $this->fail($order);
+            }
+        }
+
+        return redirect()->route('orders.create')
+            ->with('error', 'Ödeme başarısız veya iptal edildi. Lütfen tekrar deneyiniz.');
+    }
 }

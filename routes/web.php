@@ -88,6 +88,10 @@ Route::prefix('paytr')->group(function () {
     Route::post('/bildirim', [PaytrController::class, 'bildirim'])->name('paytr.bildirim');
     Route::get('/{order}/success', [PaytrController::class, 'success'])->name('paytr.success');
     Route::get('/{order}/fail', [PaytrController::class, 'fail'])->name('paytr.fail');
+
+    // Bazı kurulumlarda PayTR dönüş URL'i sabit verilir (id'siz). 404 olmaması için destekleyelim.
+    Route::get('/success', [PaytrController::class, 'successStatic'])->name('paytr.success-static');
+    Route::get('/fail', [PaytrController::class, 'failStatic'])->name('paytr.fail-static');
 });
 
 // Hızlı Ödeme Routes (herkese açık)

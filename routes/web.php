@@ -151,13 +151,13 @@ Route::middleware([
             return $request->user()->redirectToBillingPortal(route('profile.show'));
         })->name('billing-portal');
 
-        // Hızlı Ödeme Yönetimi (Admin için)
-        Route::prefix('admin/quick-payments')->middleware(['admin'])->group(function () {
-            Route::get('/', [QuickPaymentController::class, 'index'])->name('admin.quick-payments.index');
-            Route::post('/create', [QuickPaymentController::class, 'create'])->name('admin.quick-payments.create');
-        });
-
         // ADD YOUR SUBSCRIBED ROUTES HERE
 
+    });
+
+    // Admin sayfaları abonelikten bağımsız (admin kontrolü ayrıca var)
+    Route::prefix('admin/quick-payments')->middleware(['admin'])->group(function () {
+        Route::get('/', [QuickPaymentController::class, 'index'])->name('admin.quick-payments.index');
+        Route::post('/create', [QuickPaymentController::class, 'create'])->name('admin.quick-payments.create');
     });
 });

@@ -11,4 +11,7 @@ return [
     "google_tracking_id" => env("GOOGLE_TRACKING_ID"),
     // kuveytpos | paytr
     "payment_provider" => env("PAYMENT_PROVIDER", "kuveytpos"),
+
+    // Quick payment link creation API key (optional but recommended)
+    "quick_payment_api_key" => env("QUICK_PAYMENT_API_KEY", ""),
 ];

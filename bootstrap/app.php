@@ -29,6 +29,11 @@ return Application::configure(basePath: dirname(__DIR__))
             'kuveytpos/callback',
             'paytr/bildirim',
         ]);
+
+        $middleware->alias([
+            'quick_payment_api_key' => \App\Http\Middleware\QuickPaymentApiKey::class,
+            'admin' => \App\Http\Middleware\EnsureUserIsAdmin::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

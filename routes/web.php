@@ -152,7 +152,7 @@ Route::middleware([
         })->name('billing-portal');
 
         // Hızlı Ödeme Yönetimi (Admin için)
-        Route::prefix('admin/quick-payments')->group(function () {
+        Route::prefix('admin/quick-payments')->middleware(['admin'])->group(function () {
             Route::get('/', [QuickPaymentController::class, 'index'])->name('admin.quick-payments.index');
             Route::post('/create', [QuickPaymentController::class, 'create'])->name('admin.quick-payments.create');
         });

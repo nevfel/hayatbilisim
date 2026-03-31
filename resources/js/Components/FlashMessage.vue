@@ -31,7 +31,7 @@ onMounted(() => {
 </script>
 
 <template>
-    <div v-if="show && message" class="fixed top-4 right-4 z-50 max-w-md animate-fade-in">
+    <div v-if="show && message" class="fixed top-20 right-4 z-[60] max-w-md animate-fade-in">
         <div
             class="rounded-lg shadow-lg p-4 flex items-start space-x-3"
             :class="{

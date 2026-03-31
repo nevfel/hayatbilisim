@@ -27,6 +27,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'kuveytpos/success',
             'kuveytpos/fail',
             'kuveytpos/callback',
+            'paytr/bildirim',
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

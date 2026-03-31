@@ -141,10 +141,14 @@ class PaytrOdeme
 
     private function createMerchantOid(): string
     {
+        // PayTR: merchant_oid alfanumerik olmalı, özel karakter içeremez.
         // PayTR 64 karakter sınırı var; kısa ve benzersiz tutalım.
-        // order_number + 8 char random
-        $suffix = strtoupper(Str::random(8));
-        $oid = $this->order->order_number . '-' . $suffix;
+        $base = (string) $this->order->order_number;
+        $base = preg_replace('/[^A-Za-z0-9]/', '', $base) ?: ('ORDER' . $this->order->id);
+
+        $suffix = strtoupper(Str::random(10));
+        $oid = strtoupper($base . $suffix);
+
         return Str::limit($oid, 64, '');
     }
 }

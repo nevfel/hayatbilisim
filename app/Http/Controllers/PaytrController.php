@@ -24,8 +24,15 @@ class PaytrController extends Controller
         $result = $paytrOdeme->getToken();
 
         if (!$result['success']) {
-            return redirect()->route('payment.initiate', ['order' => $order->id])
-                ->with('error', $result['error'] ?? 'PayTR ödeme başlatılamadı.');
+            // payment.initiate -> (provider=paytr) tekrar buraya döneceği için redirect döngüsüne girer.
+            Log::error('PayTR token failed, preventing redirect loop', [
+                'order_id' => $order->id,
+                'error' => $result['error'] ?? null,
+                'raw' => $result['raw'] ?? null,
+            ]);
+
+            return redirect()->route('orders.create')
+                ->with('error', $result['error'] ?? 'PayTR ödeme başlatılamadı. Lütfen daha sonra tekrar deneyiniz.');
         }
 
         // Payment kaydı: pending

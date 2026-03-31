@@ -98,6 +98,7 @@ Route::prefix('paytr')->group(function () {
 Route::prefix('quick-payment')->group(function () {
     Route::get('/{payment_number}', [QuickPaymentController::class, 'show'])->name('quick-payment.show');
     Route::post('/{payment_number}/pay', [QuickPaymentController::class, 'pay'])->name('quick-payment.pay');
+    Route::get('/{payment_number}/paytr', [QuickPaymentController::class, 'paytr'])->name('quick-payment.paytr');
     Route::get('/success/{payment_number}', [QuickPaymentController::class, 'success'])->name('quick-payment.success');
 });
 

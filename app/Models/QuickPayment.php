@@ -47,6 +47,11 @@ class QuickPayment extends Model
      */
     public function getPaymentLinkAttribute()
     {
+        // PayTR seçiliyse direkt iframe ödeme sayfasına git
+        if (config('site.payment_provider', 'kuveytpos') === 'paytr') {
+            return route('quick-payment.paytr', ['payment_number' => $this->payment_number]);
+        }
+
         return route('quick-payment.show', ['payment_number' => $this->payment_number]);
     }
 

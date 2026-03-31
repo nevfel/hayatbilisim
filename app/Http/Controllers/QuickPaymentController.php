@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\QuickPayment;
 use App\Repositories\Odeme\KuveytPosHizliOdeme;
+use App\Repositories\Odeme\PaytrHizliOdeme;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
@@ -44,6 +45,7 @@ class QuickPaymentController extends Controller
                 'success' => true,
                 'payment_number' => $quickPayment->payment_number,
                 'payment_link' => $quickPayment->payment_link,
+                'payment_detail_link' => route('quick-payment.show', ['payment_number' => $quickPayment->payment_number]),
                 'message' => 'Hızlı ödeme linki oluşturuldu.',
             ]);
 
@@ -73,9 +75,53 @@ class QuickPaymentController extends Controller
                 ->with('info', 'Bu ödeme zaten tamamlanmış.');
         }
 
+        // Sağlayıcı PayTR ise direkt iframe akışına yönlendir
+        if (config('site.payment_provider', 'kuveytpos') === 'paytr') {
+            return redirect()->route('quick-payment.paytr', ['payment_number' => $payment_number]);
+        }
+
         return Inertia::render('QuickPayment/Show', [
             'quickPayment' => $quickPayment,
         ]);
+    }
+
+    /**
+     * PayTR ile hızlı ödeme (iFrame)
+     */
+    public function paytr($payment_number)
+    {
+        $quickPayment = QuickPayment::where('payment_number', $payment_number)->firstOrFail();
+
+        if ($quickPayment->isPaid()) {
+            return redirect()->route('quick-payment.success', ['payment_number' => $payment_number])
+                ->with('info', 'Bu ödeme zaten tamamlanmış.');
+        }
+
+        $paytr = new PaytrHizliOdeme($quickPayment);
+        $result = $paytr->getToken();
+
+        if (!$result['success']) {
+            Log::error('PayTR quick payment token failed', [
+                'payment_number' => $quickPayment->payment_number,
+                'error' => $result['error'] ?? null,
+                'raw' => $result['raw'] ?? null,
+            ]);
+
+            return redirect()->route('quick-payment.show', ['payment_number' => $payment_number])
+                ->with('error', $result['error'] ?? 'PayTR ödeme başlatılamadı. Lütfen tekrar deneyiniz.');
+        }
+
+        $quickPayment->payment_extra = array_merge($quickPayment->payment_extra ?? [], [
+            'paytr' => [
+                'merchant_oid' => $result['merchant_oid'] ?? null,
+                'started_at' => now()->toDateTimeString(),
+            ],
+        ]);
+        $quickPayment->payment_info = 'PayTR ödeme başlatıldı';
+        $quickPayment->status = 'pending';
+        $quickPayment->save();
+
+        return view('paytr.pay', ['token' => $result['token']]);
     }
 
     /**

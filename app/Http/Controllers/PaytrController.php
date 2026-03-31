@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order;
+use App\Models\QuickPayment;
 use App\Repositories\Odeme\PaytrOdeme;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
@@ -98,6 +99,12 @@ class PaytrController extends Controller
         })->first();
 
         if (!$order) {
+            // QuickPayment (link ile ödeme) olabilir
+            $quickPayment = QuickPayment::where('payment_extra->paytr->merchant_oid', $merchantOid)->first();
+            if ($quickPayment) {
+                return $this->handleQuickPaymentNotification($request, $quickPayment, $merchantOid, $status, $totalAmount);
+            }
+
             Log::error('PAYTR notification failed: order not found', [
                 'merchant_oid' => $merchantOid,
             ]);
@@ -162,6 +169,45 @@ class PaytrController extends Controller
         return 'OK';
     }
 
+    private function handleQuickPaymentNotification(Request $request, QuickPayment $quickPayment, string $merchantOid, string $status, string $totalAmount)
+    {
+        if ($quickPayment->isPaid() && $status === 'success') {
+            return 'OK';
+        }
+
+        if ($status === 'success') {
+            $paidAmount = ((int) $totalAmount) / 100;
+
+            $quickPayment->payment_ok = true;
+            $quickPayment->status = 'completed';
+            $quickPayment->payment_date = now();
+            $quickPayment->payment_info = 'PayTR ödeme alındı';
+            $quickPayment->payment_extra = array_merge($quickPayment->payment_extra ?? [], [
+                'paytr' => array_merge(($quickPayment->payment_extra['paytr'] ?? []), [
+                    'notification' => $request->all(),
+                    'paid_amount' => $paidAmount,
+                    'confirmed_at' => now()->toDateTimeString(),
+                ]),
+            ]);
+            $quickPayment->save();
+        } else {
+            $failMsg = trim('PayTR ödeme başarısız ' . ($request->input('failed_reason_code') ?? '') . ' ' . ($request->input('failed_reason_msg') ?? ''));
+
+            $quickPayment->payment_ok = false;
+            $quickPayment->status = 'failed';
+            $quickPayment->payment_info = $failMsg;
+            $quickPayment->payment_extra = array_merge($quickPayment->payment_extra ?? [], [
+                'paytr' => array_merge(($quickPayment->payment_extra['paytr'] ?? []), [
+                    'notification' => $request->all(),
+                    'failed_at' => now()->toDateTimeString(),
+                ]),
+            ]);
+            $quickPayment->save();
+        }
+
+        return 'OK';
+    }
+
     public function success(Order $order)
     {
         Log::info('paytr success return', [
@@ -205,6 +251,12 @@ class PaytrController extends Controller
             if ($order) {
                 return $this->success($order);
             }
+
+            $quickPayment = QuickPayment::where('payment_extra->paytr->merchant_oid', $merchantOid)->first();
+            if ($quickPayment) {
+                return redirect()->route('quick-payment.success', ['payment_number' => $quickPayment->payment_number])
+                    ->with('success', 'Ödeme isteğiniz alındı. Kesinleşmesi için PayTR bildirimi bekleniyor.');
+            }
         }
 
         return redirect()->route('orders.create')
@@ -224,6 +276,12 @@ class PaytrController extends Controller
 
             if ($order) {
                 return $this->fail($order);
+            }
+
+            $quickPayment = QuickPayment::where('payment_extra->paytr->merchant_oid', $merchantOid)->first();
+            if ($quickPayment) {
+                return redirect()->route('quick-payment.show', ['payment_number' => $quickPayment->payment_number])
+                    ->with('error', 'Ödeme başarısız veya iptal edildi. Lütfen tekrar deneyiniz.');
             }
         }
 

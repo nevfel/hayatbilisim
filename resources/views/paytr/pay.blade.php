@@ -11,7 +11,7 @@
         .header { padding: 16px 20px; border-bottom: 1px solid #eee; }
         .header h1 { font-size: 16px; margin:0; }
         .body { padding: 0; }
-        iframe { width: 100%; border: 0; min-height: 720px; }
+        iframe { width: 100%; border: 0; min-height: 820px; height: 100vh; }
         .note { padding: 12px 20px; color:#666; font-size: 13px; border-top: 1px solid #eee; }
     </style>
 </head>
@@ -22,7 +22,7 @@
             <h1>PayTR ile Güvenli Ödeme</h1>
         </div>
         <div class="body">
-            <iframe id="paytriframe" src="{{ rtrim(config('paytr.iframe_base_url'), '/') }}/{{ $token }}" scrolling="no"></iframe>
+            <iframe id="paytriframe" src="{{ rtrim(config('paytr.iframe_base_url'), '/') }}/{{ $token }}" scrolling="yes"></iframe>
         </div>
         <div class="note">
             Ödemeniz başarıyla tamamlandığında sistemimize PayTR bildirim gönderecek ve siparişiniz kesinleşecektir.
@@ -36,9 +36,13 @@
         if (typeof e.data === "string" && e.data.indexOf("paytriframe") > -1) {
             var iframe = document.getElementById("paytriframe");
             if (!iframe) return;
-            var parts = e.data.split(":");
+            // Bazı entegrasyonlarda ayırıcı ":" veya "|" olabilir
+            var parts = e.data.indexOf("|") > -1 ? e.data.split("|") : e.data.split(":");
             if (parts.length === 2) {
-                iframe.style.height = parts[1] + "px";
+                var h = parseInt(parts[1], 10);
+                if (!isNaN(h) && h > 0) {
+                    iframe.style.height = h + "px";
+                }
             }
         }
     }, false);

@@ -16,6 +16,10 @@
                             <span class="text-gray-600">Toplam Tutar:</span>
                             <span class="text-2xl font-bold text-indigo-600">{{ formatCurrency(order.total_amount) }}</span>
                         </div>
+                        <div class="flex justify-between mb-1">
+                            <span class="text-gray-600">Ödenecek Tutar:</span>
+                            <span class="text-xl font-bold text-indigo-600">{{ formatCurrency(payableAmount) }}</span>
+                        </div>
                     </div>
                 </div>
 
@@ -128,7 +132,7 @@
                             class="w-full bg-indigo-600 text-white py-3 px-6 rounded-md hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed font-semibold"
                         >
                             <span v-if="form.processing">İşleniyor...</span>
-                            <span v-else>Ödeme Yap ({{ formatCurrency(order.total_amount) }})</span>
+                            <span v-else>Ödeme Yap ({{ formatCurrency(payableAmount) }})</span>
                         </button>
                     </form>
                 </div>
@@ -147,6 +151,10 @@ const props = defineProps({
         type: Object,
         required: true,
     },
+});
+
+const payableAmount = computed(() => {
+    return props.order?.payment?.amount ?? props.order.total_amount;
 });
 
 const form = useForm({

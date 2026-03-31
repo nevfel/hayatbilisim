@@ -29,7 +29,7 @@ class PaymentController extends Controller
         }
 
         return Inertia::render('Payment/Initiate', [
-            'order' => $order->load('items.product'),
+            'order' => $order->load('items.product', 'payment'),
         ]);
     }
 

@@ -20,8 +20,10 @@ class PaytrController extends Controller
                 ->with('error', 'Bu sipariş zaten tamamlanmış.');
         }
 
+        $amountToCharge = (float) (($order->payment?->amount) ?? ($order->payment_extra['pay_amount'] ?? $order->total_amount));
+
         $paytrOdeme = new PaytrOdeme($order);
-        $result = $paytrOdeme->getToken();
+        $result = $paytrOdeme->getToken($amountToCharge);
 
         if (!$result['success']) {
             // payment.initiate -> (provider=paytr) tekrar buraya döneceği için redirect döngüsüne girer.
@@ -40,11 +42,13 @@ class PaytrController extends Controller
             ['order_id' => $order->id],
             [
                 'transaction_id' => $result['merchant_oid'] ?? null,
-                'amount' => $order->total_amount,
+                'amount' => $amountToCharge,
                 'status' => 'pending',
                 'payment_method' => 'paytr',
                 'initial_request_data' => [
                     'merchant_oid' => $result['merchant_oid'] ?? null,
+                    'order_total' => (float) $order->total_amount,
+                    'pay_amount' => $amountToCharge,
                 ],
             ]
         );

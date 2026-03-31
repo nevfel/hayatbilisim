@@ -18,7 +18,7 @@ class PaytrOdeme
      *
      * @return array{success:bool, token?:string, merchant_oid?:string, error?:string, raw?:array}
      */
-    public function getToken(): array
+    public function getToken(?float $amount = null): array
     {
         $merchantId = (string) config('paytr.merchant_id');
         $merchantKey = (string) config('paytr.merchant_key');
@@ -37,8 +37,9 @@ class PaytrOdeme
         $phone = (string) ($this->order->billing_phone ?? '');
         $address = (string) ($this->order->billing_address ?? '');
 
+        $amountToCharge = $amount ?? (float) $this->order->total_amount;
         // PayTR kuruş ister
-        $paymentAmount = (int) round(((float) $this->order->total_amount) * 100);
+        $paymentAmount = (int) round($amountToCharge * 100);
 
         // merchant_oid benzersiz olmalı
         $merchantOid = $this->createMerchantOid();
@@ -46,7 +47,7 @@ class PaytrOdeme
         // Sepet bilgisi (PayTR: base64(json))
         // Burada minimum çalışan format kullanıyoruz.
         $basket = [
-            ['Sipariş ' . $this->order->order_number, (string) number_format((float) $this->order->total_amount, 2, '.', ''), 1],
+            ['Sipariş ' . $this->order->order_number, (string) number_format((float) $amountToCharge, 2, '.', ''), 1],
         ];
         $userBasket = base64_encode(json_encode($basket, JSON_UNESCAPED_UNICODE));
 

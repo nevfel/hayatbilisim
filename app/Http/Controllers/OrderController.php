@@ -82,6 +82,8 @@ class OrderController extends Controller
             'shipping_address' => 'nullable|string|max:500',
             'shipping_city' => 'nullable|string|max:100',
             'shipping_postal_code' => 'nullable|string|max:10',
+            // Kısmi ödeme (kapora) için
+            'pay_amount' => 'nullable|numeric',
         ]);
 
         $cartItems = $this->getCartQuery()->get();
@@ -103,6 +105,19 @@ class OrderController extends Controller
             return $basePrice + $servicesPrice;
         });
 
+        $minPayAmount = 1000;
+        $payAmount = (float) ($request->input('pay_amount') ?? $total);
+        if ($payAmount < $minPayAmount) {
+            return redirect()->back()
+                ->withErrors(['pay_amount' => "Minimum ödeme tutarı {$minPayAmount} TL olmalıdır."])
+                ->withInput();
+        }
+        if ($payAmount > (float) $total) {
+            return redirect()->back()
+                ->withErrors(['pay_amount' => 'Ödenecek tutar, toplam tutardan büyük olamaz.'])
+                ->withInput();
+        }
+
         // Sipariş oluştur
         $order = Order::create([
             'user_id' => auth()->id(),
@@ -119,6 +134,10 @@ class OrderController extends Controller
             'shipping_address' => $request->shipping_address ?? $request->billing_address,
             'shipping_city' => $request->shipping_city ?? $request->billing_city,
             'shipping_postal_code' => $request->shipping_postal_code ?? $request->billing_postal_code,
+            'payment_extra' => [
+                'pay_amount' => $payAmount,
+                'min_pay_amount' => $minPayAmount,
+            ],
         ]);
 
         // Sipariş kalemlerini oluştur
@@ -155,11 +174,16 @@ class OrderController extends Controller
             'total' => $total,
         ]);
         try {
+            $provider = config('site.payment_provider', 'kuveytpos');
             Payment::create([
                 'order_id' => $order->id,
-                'amount' => $total,
+                'amount' => $payAmount,
                 'status' => 'pending',
-                'payment_method' => 'bank_transfer',
+                'payment_method' => $provider,
+                'initial_request_data' => [
+                    'order_total' => (float) $total,
+                    'pay_amount' => $payAmount,
+                ],
             ]);
             \Log::info('OrderController::store - Payment kaydı oluşturuldu');
         } catch (\Exception $e) {

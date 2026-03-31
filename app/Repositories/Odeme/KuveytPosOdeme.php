@@ -109,6 +109,8 @@ class KuveytPosOdeme
     public function initialize3DSecure($ccName, $ccNumber, $ccCvc, $expiryYear, $expiryMonth)
     {
         try {
+            $amountToCharge = (float) (($this->order->payment?->amount) ?? ($this->order->payment_extra['pay_amount'] ?? $this->order->total_amount));
+
             // Kredi kartı bilgileri
             $creditCard = $this->createCard($this->pos, [
                 'number' => $ccNumber,
@@ -137,7 +139,7 @@ class KuveytPosOdeme
             // Sipariş verileri
             $orderData = [
                 'id' => $this->order->order_number,
-                'amount' => $this->order->total_amount, // TL cinsinden - Mews POS otomatik 100 ile çarpacak
+                'amount' => $amountToCharge, // TL cinsinden - Mews POS otomatik 100 ile çarpacak
                 'currency' => PosInterface::CURRENCY_TRY,
                 'installment' => 1,
                 'lang' => PosInterface::LANG_TR,
@@ -376,7 +378,7 @@ class KuveytPosOdeme
 
                 $orderData = [
                     'id' => $this->order->order_number,
-                    'amount' => $this->order->total_amount, // TL cinsinden - Mews POS otomatik 100 ile çarpacak
+                    'amount' => (float) (($this->order->payment?->amount) ?? ($this->order->payment_extra['pay_amount'] ?? $this->order->total_amount)), // TL cinsinden
                     'currency' => PosInterface::CURRENCY_TRY,
                     'installment' => 1,
                     'lang' => PosInterface::LANG_TR,
@@ -568,7 +570,7 @@ class KuveytPosOdeme
             // Sipariş verileri
             $orderData = [
                 'id' => $this->order->order_number,
-                'amount' => $this->order->total_amount, // TL cinsinden - Mews POS otomatik 100 ile çarpacak
+                'amount' => (float) (($this->order->payment?->amount) ?? ($this->order->payment_extra['pay_amount'] ?? $this->order->total_amount)),
                 'currency' => PosInterface::CURRENCY_TRY,
                 'installment' => 1,
                 'lang' => PosInterface::LANG_TR,
@@ -661,6 +663,7 @@ class KuveytPosOdeme
     public function payDirect($ccName, $ccNumber, $ccCvc, $expiryYear, $expiryMonth)
     {
         try {
+            $amountToCharge = (float) (($this->order->payment?->amount) ?? ($this->order->payment_extra['pay_amount'] ?? $this->order->total_amount));
 
             $creditCard = $this->createCard($this->pos, [
                 'number' => $ccNumber,
@@ -673,7 +676,7 @@ class KuveytPosOdeme
             // Sipariş verileri
             $orderData = [
                 'id' => $this->order->order_number,
-                'amount' => $this->order->total_amount, // TL cinsinden
+                'amount' => $amountToCharge, // TL cinsinden
                 'currency' => PosInterface::CURRENCY_TRY,
                 'installment' => 1,
                 'lang' => PosInterface::LANG_TR,

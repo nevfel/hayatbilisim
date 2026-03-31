@@ -244,6 +244,25 @@
                                             <span>{{ formatPrice(total) }}</span>
                                         </div>
                                     </div>
+                                    <div class="form-control mb-4">
+                                        <label class="label py-1">
+                                            <span class="label-text text-xs font-medium">Ödenecek Tutar</span>
+                                        </label>
+                                        <input
+                                            v-model.number="form.pay_amount"
+                                            type="number"
+                                            min="1000"
+                                            :max="total"
+                                            step="1"
+                                            class="input input-bordered input-sm bg-white/20 text-primary-content placeholder:text-primary-content/60"
+                                            :class="{ 'input-error': form.errors.pay_amount }"
+                                            placeholder="1000"
+                                        />
+                                        <label class="label py-1">
+                                            <span v-if="form.errors.pay_amount" class="label-text-alt text-error">{{ form.errors.pay_amount }}</span>
+                                            <span v-else class="label-text-alt text-primary-content/80">Minimum 1.000 TL, maksimum {{ formatPrice(total) }}</span>
+                                        </label>
+                                    </div>
                                     <div class="card-actions flex-col gap-2">
                                         <button
                                             type="submit"
@@ -253,7 +272,7 @@
                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                                             </svg>
-                                            {{ form.processing ? 'İşleniyor...' : 'Ödemeye Geç' }}
+                                            {{ form.processing ? 'İşleniyor...' : `Ödemeye Geç (${formatPrice(form.pay_amount || total)})` }}
                                         </button>
                                         <Link
                                             :href="route('cart.index')"
@@ -304,6 +323,7 @@ const form = useForm({
     shipping_city: '',
     shipping_postal_code: '',
     terms_accepted: false,
+    pay_amount: props.total,
 });
 
 const formatPrice = (price) => {

@@ -196,6 +196,11 @@ class QuickPaymentController extends Controller
     {
         $quickPayment = QuickPayment::where('payment_number', $payment_number)->firstOrFail();
 
+        if (!$quickPayment->isPaid()) {
+            return redirect()->route('quick-payment.paytr', ['payment_number' => $payment_number])
+                ->with('info', 'Ödeme isteğiniz alındı. Kesinleşmesi için PayTR bildirimi bekleniyor.');
+        }
+
         return Inertia::render('QuickPayment/Success', [
             'quickPayment' => $quickPayment,
         ]);

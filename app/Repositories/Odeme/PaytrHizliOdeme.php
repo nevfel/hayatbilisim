@@ -77,9 +77,10 @@ class PaytrHizliOdeme
             'user_address' => $address,
             'user_phone' => $phone,
 
-            // Dönüş sayfaları sabit de olabilir
-            'merchant_ok_url' => (string) (config('paytr.success_url') ?: route('paytr.success-static')),
-            'merchant_fail_url' => (string) (config('paytr.failure_url') ?: route('paytr.fail-static')),
+            // Link ile ödemede kullanıcıyı sepet/sipariş akışına sokmayalım.
+            // Doğrudan QuickPayment sonucu sayfalarına dönsün.
+            'merchant_ok_url' => route('quick-payment.success', ['payment_number' => $this->quickPayment->payment_number]),
+            'merchant_fail_url' => route('quick-payment.show', ['payment_number' => $this->quickPayment->payment_number]),
 
             'debug_on' => (string) config('paytr.debug_on', 0),
             'timeout_limit' => '30',

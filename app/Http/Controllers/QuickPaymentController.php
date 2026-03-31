@@ -107,8 +107,11 @@ class QuickPaymentController extends Controller
                 'raw' => $result['raw'] ?? null,
             ]);
 
-            return redirect()->route('quick-payment.show', ['payment_number' => $payment_number])
-                ->with('error', $result['error'] ?? 'PayTR ödeme başlatılamadı. Lütfen tekrar deneyiniz.');
+            // Redirect döngüsünü engelle: show() PayTR seçiliyken tekrar buraya yönlendiriyor.
+            return view('paytr.error', [
+                'message' => $result['error'] ?? 'PayTR ödeme başlatılamadı. Lütfen tekrar deneyiniz.',
+                'paymentNumber' => $quickPayment->payment_number,
+            ]);
         }
 
         $quickPayment->payment_extra = array_merge($quickPayment->payment_extra ?? [], [

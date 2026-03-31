@@ -36,6 +36,10 @@ class PaytrHizliOdeme
         $email = (string) ($this->quickPayment->gon_email ?: 'test@test.com');
         $name = (string) ($this->quickPayment->gon_adsoyad ?: 'Müşteri');
         $phone = (string) ($this->quickPayment->gon_phone ?: '');
+        $phone = preg_replace('/[^0-9]/', '', $phone) ?: '0000000000';
+
+        // PayTR get-token: user_address zorunlu. Hızlı ödeme modelinde adres yok, sabit değer veriyoruz.
+        $address = (string) (($this->quickPayment->payment_extra['address'] ?? null) ?: 'Türkiye');
 
         $amount = (float) $this->quickPayment->amount;
         $paymentAmount = (int) round($amount * 100);
@@ -70,7 +74,7 @@ class PaytrHizliOdeme
             'test_mode' => $testMode,
 
             'user_name' => $name,
-            'user_address' => '',
+            'user_address' => $address,
             'user_phone' => $phone,
 
             // Dönüş sayfaları sabit de olabilir

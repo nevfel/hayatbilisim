@@ -35,7 +35,9 @@ class PaytrOdeme
         $email = (string) ($this->order->billing_email ?? 'test@test.com');
         $name = (string) ($this->order->billing_name ?? 'Müşteri');
         $phone = (string) ($this->order->billing_phone ?? '');
+        $phone = preg_replace('/[^0-9]/', '', $phone) ?: '0000000000';
         $address = (string) ($this->order->billing_address ?? '');
+        $address = $address !== '' ? $address : 'Türkiye';
 
         $amountToCharge = $amount ?? (float) $this->order->total_amount;
         // PayTR kuruş ister

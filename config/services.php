@@ -46,4 +46,8 @@ return [
         'test_mode' => env('KUVEYTPOS_TEST_MODE', true),
     ],
 
+    'contact' => [
+        'phone' => env('CONTACT_PHONE', '+908501234567'),
+    ],
+
 ];

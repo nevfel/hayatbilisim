@@ -44,6 +44,11 @@ class HandleInertiaRequests extends Middleware
                 'info' => fn() => $request->session()->get('info'),
             ],
 
+            // Contact info
+            'contact' => [
+                'phone' => config('services.contact.phone'),
+            ],
+
             // share subscription details
             'user' => fn() => $request->user() ? $request->user()->only('id', 'name', 'email') : null,
             'auth.user.subscription' => fn() => $request->user()?->subscribed() ? $request->user()->subscription('default') : null,

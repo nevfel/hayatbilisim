@@ -24,9 +24,6 @@
         <div class="body">
             <iframe id="paytriframe" src="{{ rtrim(config('paytr.iframe_base_url'), '/') }}/{{ $token }}" scrolling="yes"></iframe>
         </div>
-        <div class="note">
-            Ödemeniz başarıyla tamamlandığında sistemimize PayTR bildirim gönderecek ve siparişiniz kesinleşecektir.
-        </div>
     </div>
 </div>
 
